@@ -1,18 +1,3 @@
-/*
-  To upload through terminal you can use: curl -F "image=@firmware.bin"
-  esp8266-webupdate.local/update
-*/
-
-bool ota_setup_flag = false;
-
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-
-ESP8266WebServer server(80);
-const char *serverIndex =
-  "<form method='POST' action='/update' enctype='multipart/form-data'><input "
-  "type='file' name='update'><input type='submit' value='Update'></form>";
-
 void ota_setup() {
   MDNS.begin(HOSTNAME);
 

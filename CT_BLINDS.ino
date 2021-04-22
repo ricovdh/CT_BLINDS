@@ -1,7 +1,4 @@
-/** ClevrThings - BLINDS **/
-
-#define ATOMIC_FS_UPDATE
-
+/** ClevrThings BLINDS v0.1.0 **/
 
 #include "SETTINGS.h"
 #include "MEM.h"
@@ -13,20 +10,10 @@
 #include "CONTROL.h"
 
 void setup() {
-  Serial.begin(9600);
   mem_setup();
   system_setup();
   wifi_setup();
   mqtt_setup();
-  pinMode(open, OUTPUT);
-  pinMode(close, OUTPUT);
-  pinMode(led, OUTPUT);
-  digitalWrite(led, LOW);
-  pinMode(button, INPUT);
-  pinMode(switch_down, INPUT);
-  pinMode(switch_up, INPUT);
-  digitalWrite(switch_down, LOW);
-  digitalWrite(switch_up, LOW);
   ota_setup();
 }
 

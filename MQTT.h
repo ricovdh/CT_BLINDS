@@ -1,15 +1,5 @@
 /** MQTT **/
 
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-WiFiClient espClient;
-PubSubClient client(espClient);
-#define MSG_BUFFER_SIZE	(50)
-char msg[MSG_BUFFER_SIZE];
-
-int int_message = 200;
-bool check_incoming_message = false;
-
 void clear_message() {
   int_message = 200;
 }
@@ -35,9 +25,17 @@ void reconnect() {
     if (client.connect(HOSTNAME, MQTT_USER,MQTT_PASS)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      sprintf(position,"%ld", get_cur_position());
-      client.publish(out_topic, VERSION);
+      char cur_version[15];
+      sprintf(cur_version,"version,%s", VERSION);
+      client.publish(out_topic, cur_version);
+      sprintf(position,"current_position,%ld", get_cur_position());
       client.publish(out_topic, position);
+      char open_st[15];
+      sprintf(open_st,"set_open_time,%s", open_time_char);
+      client.publish(out_topic, open_st);
+      char close_st[15];
+      sprintf(close_st,"set_close_time,%s", close_time_char);
+      client.publish(out_topic, close_st);
       // ... and resubscribe
       client.subscribe(in_topic);
     } else {
@@ -62,48 +60,3 @@ void mqtt_loop() {
   }
   client.loop();
 }
-
-
-
-
-
-// #include <ESP8266MQTTClient.h>
-// MQTTClient mqtt;
-
-// void mqtt_setup() {
-
-//   //topic, data, data is continuing
-//   mqtt.onData([](String topic, String data, bool cont) {
-//     int_message = data.toInt();
-//     check_incoming_message = true;
-//   });
-
-//   mqtt.onSubscribe([](int sub_id) {
-//     char position[3];
-//     sprintf(position,"%ld", get_cur_position());
-//     mqtt.publish(out_topic, VERSION, 0, 0);
-//     mqtt.publish(out_topic, position);
-//   });
-
-//   mqtt.onConnect([]() {
-//   });
-
-//   mqtt.onDisconnect([]() {
-//   });
-
-//   String mqtt_address = "mqtt://";
-//   mqtt_address += MQTT_USER;
-//   mqtt_address += ":";
-//   mqtt_address += MQTT_PASS;
-//   mqtt_address += "@";
-//   mqtt_address += MQTT_SERVER;
-//   mqtt_address += ":";
-//   mqtt_address += MQTT_PORT;
-
-//   mqtt.begin(mqtt_address, 60, true);
-//   //mqtt.begin(mqtt_address, {.lwtTopic = out_topic, .lwtMsg = "offline", .lwtQos = 0, .lwtRetain = 0});
-
-//   mqtt.subscribe(in_topic, 1);
-
-
-// }

@@ -1,15 +1,5 @@
 /** SYSTEM **/
 
-int chipID;
-char SSID[30];
-char in_topic[25];
-char out_topic[25];
-char open_time_char[3];
-char close_time_char[3];
-char HOSTNAME[50];
-const int led = 13;
-
-
 void reboot() {
   ESP.restart();
 }
@@ -51,15 +41,33 @@ void create_hostname() {
   _hostname.toCharArray(HOSTNAME, 50);
 }
 
-void system_setup() {
-  create_ssid();
-  create_in_topic();
-  create_out_topic();
-  create_hostname();
+void store_open_close_time_to_char() {
   String time = "";
   time += open_time;
   time.toCharArray(open_time_char, 3);
   time = "";
   time += close_time;
   time.toCharArray(close_time_char, 3);
+}
+
+void set_pinModes() {
+  pinMode(open, OUTPUT);
+  pinMode(close, OUTPUT);
+  pinMode(button, INPUT);
+  pinMode(led, OUTPUT);
+  pinMode(switch_down, INPUT);
+  pinMode(switch_up, INPUT);
+  digitalWrite(led, LOW);
+  digitalWrite(switch_down, LOW);
+  digitalWrite(switch_up, LOW);
+}
+
+void system_setup() {
+  Serial.begin(BAUDRATE);
+  create_ssid();
+  create_in_topic();
+  create_out_topic();
+  create_hostname();
+  store_open_close_time_to_char();
+  set_pinModes();
 }

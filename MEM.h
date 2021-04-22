@@ -1,10 +1,4 @@
-#include <EEPROM.h>
-
-byte first_boot;
-byte open_time;
-byte close_time;
-int current_position;
-char position[3];
+/** MEMORY **/
 
 void eeprom_commit() {
   if (EEPROM.commit()) {

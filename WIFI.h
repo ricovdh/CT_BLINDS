@@ -1,12 +1,5 @@
 /** WIFI **/
 
-#include <WiFiManager.h>  // https://github.com/tzapu/WiFiManager
-WiFiManager wm;
-WiFiManagerParameter custom_open_time("opentime", "Blinds open sec", "", 3);
-WiFiManagerParameter custom_close_time("closetime", "Blinds close sec", "", 3);
-std::vector<const char *> menu = { "wifi", "sep", "erase", "restart", "exit" };
-bool wifi_connected;
-
 void saveWifiCallback() {
   Serial.println("[CALLBACK] saveCallback fired");
 }
@@ -49,7 +42,9 @@ void saveParamCallback() {
 
   eeprom_commit();
   
-  // reboot();
+  delay(1000);
+
+  ///reboot();
 }
 
 void handleRoute() {
@@ -74,7 +69,6 @@ void wifi_setup() {
   wm.addParameter(&custom_open_time);
   wm.addParameter(&custom_close_time);
 
-  wm.setConfigPortalBlocking(false);
   
   // callbacks
   wm.setAPCallback(configModeCallback);
@@ -119,5 +113,10 @@ void wifi_loop() {
 }
 
 void config_ap() {
-    wm.startConfigPortal(SSID, AP_PASS);
+  server.close();
+  server.stop();
+  delay(500);
+  //wm.setConfigPortalBlocking(false);
+  wm.setConfigPortalTimeout(180);
+  wm.startConfigPortal(SSID, AP_PASS);
 }

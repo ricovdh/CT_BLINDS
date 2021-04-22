@@ -1,32 +1,6 @@
-/** CONTROL **/
-
-// button
-const int button = 10;
-long buttonTimer = 0;
-
-boolean buttonActive = false;
-boolean longPressActive = false;
-
-const int open = 5;
-const int close = 12;
-
-const int switch_down = 9;
-int switch_down_last_state = 1;
-const int switch_up = 0;
-int switch_up_last_state = 1;
-
-bool open_active = false;
-bool close_active = false;
-unsigned long moving_start_time = 0;
-long max_travel = 0;
-
-bool manual_override = false;
-
-bool ota_run = false;
-
 void set_publish_clear(int msg) {
   set_cur_position(msg);
-  sprintf(position, "%ld", msg);
+  sprintf(position, "position,%ld", msg);
   client.publish(out_topic, position);
   clear_message();
 }
@@ -59,48 +33,55 @@ void move() {
 }
 
 void incoming_message() {
-  if (check_incoming_message){
+  if (check_incoming_message) {
     switch (int_message) {
       case 0 ... 100:
         move();
         break;
       case 101: // update
-        update();
+        client.publish(out_topic, "status,Checking for update");
         clear_message();
+        update();
         break;
       case 102: // start config ap
-        config_ap();
+        client.publish(out_topic, "status,Starting AP");
         clear_message();
+        config_ap();
         break;
       case 103: // reboot
+        client.publish(out_topic, "status,Rebooting");
+        delay(500);
         reboot();
         break;
       case 104: // full close manual
+        clear_message();
         digitalWrite(open, LOW);
         digitalWrite(close, HIGH);
         manual_override = true;
         set_cur_position(0);
-        clear_message();
-        Serial.println("Going full down");
+        Serial.println("status,Going full down");
+        client.publish(out_topic, "status,Going full down");
         break;
       case 105: // full open manual
+        clear_message();
         digitalWrite(close, LOW);
         digitalWrite(open, HIGH);
         manual_override = true;
         set_cur_position(100);
-        clear_message();
-        Serial.println("Going full up");
+        Serial.println("status,Going full up");
+        client.publish(out_topic, "status,Going full up");
         break;
       case 106: // stop manual
+        clear_message();
         digitalWrite(close, LOW);
         digitalWrite(open, LOW);
         manual_override = false;
-        clear_message();
-        Serial.println("stopped");
+        Serial.println("status,stopped");
+        client.publish(out_topic, "status,stopped");
         break;
       case 107: // start OTA
-        client.publish(out_topic, "OTA started");
-        clear_message;
+        client.publish(out_topic, "status,OTA started");
+        clear_message();
         ota_setup_flag = true;
         ota_setup();
         ota_run = true;
@@ -109,7 +90,7 @@ void incoming_message() {
         // statements
         break;
     }
-  check_incoming_message = false;
+    check_incoming_message = false;
   }
 }
 
