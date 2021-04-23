@@ -1,6 +1,6 @@
 /** SETTINGS **/
 
-#define VERSION "0.1.0"
+#define VERSION "0.1.1"
 
 #define SHORT_NAME "BLINDS" // the device name
 #define AP_PASS "CLEVRthings" // password for AP mode

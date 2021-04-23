@@ -1,4 +1,4 @@
-/** ClevrThings BLINDS v0.1.0 **/
+/** ClevrThings BLINDS v0.1.1 **/
 
 #include "SETTINGS.h"
 #include "MEM.h"

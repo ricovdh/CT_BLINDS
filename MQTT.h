@@ -28,7 +28,7 @@ void reconnect() {
       char cur_version[15];
       sprintf(cur_version,"version,%s", VERSION);
       client.publish(out_topic, cur_version);
-      sprintf(position,"current_position,%ld", get_cur_position());
+      sprintf(position,"position,%ld", get_cur_position());
       client.publish(out_topic, position);
       char open_st[15];
       sprintf(open_st,"set_open_time,%s", open_time_char);
@@ -36,6 +36,7 @@ void reconnect() {
       char close_st[15];
       sprintf(close_st,"set_close_time,%s", close_time_char);
       client.publish(out_topic, close_st);
+      client.publish(out_topic, "status,Started");
       // ... and resubscribe
       client.subscribe(in_topic);
     } else {

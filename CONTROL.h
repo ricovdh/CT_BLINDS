@@ -1,3 +1,5 @@
+/** CONTROL **/
+
 void set_publish_clear(int msg) {
   set_cur_position(msg);
   sprintf(position, "position,%ld", msg);
@@ -36,6 +38,7 @@ void incoming_message() {
   if (check_incoming_message) {
     switch (int_message) {
       case 0 ... 100:
+        client.publish(out_topic, "status,Ok");
         move();
         break;
       case 101: // update

@@ -1,3 +1,5 @@
+/** OTA **/
+
 void ota_setup() {
   MDNS.begin(HOSTNAME);
 
