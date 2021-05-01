@@ -1,4 +1,4 @@
-/** ClevrThings BLINDS v0.1.1 **/
+/** ClevrThings BLINDS v0.1.2 **/
 
 #include "SETTINGS.h"
 #include "MEM.h"
@@ -18,11 +18,14 @@ void setup() {
 }
 
 void loop() {
+  if (config_ap_flag) {
+    config_ap_flag = false;
+    config_ap();
+  }
   wifi_loop();
   mqtt_loop();
   incoming_message();
   check_button();
   check_switch();
-  delay(100);
   ota_loop();
 }

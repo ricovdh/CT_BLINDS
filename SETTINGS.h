@@ -1,6 +1,6 @@
 /** SETTINGS **/
 
-#define VERSION "0.1.1"
+#define VERSION "0.1.2"
 
 #define SHORT_NAME "BLINDS" // the device name
 #define AP_PASS "CLEVRthings" // password for AP mode
@@ -57,6 +57,7 @@ WiFiManagerParameter custom_open_time("opentime", "Blinds open sec", "", 3);
 WiFiManagerParameter custom_close_time("closetime", "Blinds close sec", "", 3);
 std::vector<const char *> menu = { "wifi", "sep", "erase", "restart", "exit" };
 bool wifi_connected;
+bool config_ap_flag = false;
 char SSID[30];
 char HOSTNAME[50];
 
@@ -70,6 +71,8 @@ int int_message = 200; // 200 is not used so use as default
 char in_topic[25]; // buffer to store the generated topic
 char out_topic[25];
 bool check_incoming_message = false;
+unsigned long reconnect_timer = 15000;
+int try_count = 0;
 
 
 // UPDATE

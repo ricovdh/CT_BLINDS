@@ -88,7 +88,7 @@ void wifi_setup() {
   // set custom channel
   // wm.setWiFiAPChannel(13);
 
-  wm.setConfigPortalTimeout(180);
+  //wm.setConfigPortalTimeout(180);
 
   // show static ip fields
   wm.setShowStaticFields(true);
@@ -106,17 +106,14 @@ void wifi_setup() {
   wm.setBreakAfterConfig(true);
 }
 
-void wifi_loop() {
-  if (!wifi_connected) {
-    reboot();
-  }
-}
-
 void config_ap() {
   server.close();
   server.stop();
-  delay(500);
   //wm.setConfigPortalBlocking(false);
-  wm.setConfigPortalTimeout(180);
+  //wm.setConfigPortalTimeout(180);
   wm.startConfigPortal(SSID, AP_PASS);
+}
+
+void wifi_loop() {
+    wm.process();
 }
